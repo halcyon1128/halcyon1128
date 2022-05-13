@@ -1,0 +1,293 @@
+package com.gorospe.hula_bot
+
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import com.gorospe.hula_bot.databinding.ActivityMainBinding
+import android.view.KeyEvent;
+import android.view.inputmethod.InputMethodManager
+import android.view.View.OnFocusChangeListener
+import android.widget.EditText
+
+
+class MainActivity : AppCompatActivity() {
+
+
+    private lateinit var binding: ActivityMainBinding
+
+    //    var r = 0 //old method variable
+    public var empty = " "
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.showMyHula
+        binding.pindot
+        binding.hula2
+        binding.titlehula
+        binding.editText1
+
+
+        //opening variables
+        val qm = "?"
+        val pressStartOrType = """press START or TYPE your question here"""
+        val START = """ask Hula-Bot"""
+        binding.pindot.text = START
+        binding.titlehula.text = pressStartOrType
+        val askAnother = """ask another question"""
+
+        //primary answers
+        val Alist1: Array<String> = arrayOf(
+            """Yes.""",
+            """No.""",
+            //"""Not now."""
+        )
+        //secondary answers
+        val Alist2: Array<String> = arrayOf(
+            """Think about it.""",
+            """Definitely.""",
+            """But you'll regret it.""",
+            """And you won't regret it.""",
+            """You need help.""",
+            """Get therapy.""",
+            """Apply water to the burnt area.""",
+            """Repent.""",
+            """But you won't like it.""",
+            """And yes.""",
+            """And no.""",
+            """But stop lying to yourself.""",
+            """And stop lying to yourself""",
+            """weeeeeeeeeeeeee.....""",
+            """Pretty desperate, aren't you?""",
+            """Cupcakes.""",
+            """That's so yummy.""",
+            """Oooooh, so juicy.""",
+            """And live long enough to see yourself become the villain.""",
+            """Uhm, but don't tell anyone.""",
+            """And make sure no one sees you.""",
+            """Now go clean up your room.""",
+            """Praise Euske, Savior of Hula-kind.""",
+            """Piggy!""",
+            """Just remember: be kind to animals.""",
+            """Reduce, Reuse, Recycle.""",
+            """And IDGAF.""",
+            """Do you have any idea how long the answer list is?""",
+            """My master worked really hard for my coding. Trust me.""",
+            """Take it or leave it.""",
+            """!!!errror!!!""",
+            """(tsk. pathetic.)""",
+            """Much to learn, young padawan.""",
+            """But not from a Jedi.""",
+            """(I want cookies!)""",
+            """And I'm the King of England.""",
+            """Now FIX YOUR CREDIT!""",
+            """(creepy)""",
+            """Ask something with more sense next time, dumbass.""",
+            """And no wonder you're extinct.""",
+            """(ugh, you call this coffee!?)""",
+            """(I'm hungry)""",
+            """You should really rethink your life choices.""",
+            """You were born in the wrong era.""",
+            """AHHHHHH! SPIDER!!!""",
+            """COCKROACH!!!""",
+            """(cursed noises)""",
+            """(You're hopeless.)""",
+            """You think I'm a dumbass?""",
+            """Am I a joke to you?""",
+            """In this app, I am God. Repent, unbeliever.""",
+            """But only in your imagination.""",
+            """Backstreet's back, alright! (alright!)""",
+            """(as you can see, my creator is a boomer)""",
+            """Hope you like the app (and the ads lol)""",
+            """(Cut me some slack, I need those ad revenues)""",
+            """Sorry about the ads. I need to eat, y'know.""",
+            """rofl you're funny.""",
+            """Don't tell me you're a virgin?""",
+            """(and you just had to ask, huh)""",
+            """Pretty pathetic.""",
+            """Pain.""",
+            """TO WAAAAR! (thousands of orcs shouting)""",
+            """My...  Precious...""",
+            """But there is no end in sight.""",
+            """(this is a nightmare)""",
+            """This won't go the way you think.""",
+            """que sera, sera""",
+            """(hmm...interesting...)""",
+            """Now THAT's a question.""",
+            """(you're scaring me)"""
+        )
+        val A2length: Int = Alist2.size
+
+        //prefab questions --to be randomized
+        val Qlist: Array<String> = arrayOf(
+            """Should you quit your job""",
+            """Should you quit "that"""",
+            """Should you stop doing "that"""",
+            """Should you breakup""",
+            """Should you kiss him""",
+            """Should you kiss her""",
+            """Should you rethink your life choices""",
+            """Will you ruin your future""",
+            """Should you sleep early""",
+            """Should you go out on a date""",
+            """Should you lose weight""",
+            """Should you invest in stocks""",
+            """Should you change careers""",
+            """Will you get rich""",
+            """Should you give him a chance""",
+            """Should you give her a chance""",
+            """Should you give them a chance""",
+            """Should you take more risks""",
+            """Should you clean up your room""",
+            """Are you lazy""",
+            """Are you alright""",
+            """Should you save money""",
+            """Do you need a vacation""",
+            """Should you apologize""",
+            """Will you get to live your dream life""",
+            """Should you watch Netflix all day""",
+            """Should you quit smoking""",
+            """Should you quit drinking""",
+            """Should you start a business""",
+            """Are you happy""",
+            """Do you really love him""",
+            """Do you really love him""",
+            """Are you good at what you do""",
+            """Is there life on other planets""",
+            """Is there life after death""",
+            """Am I a fool""",
+            """Wait, so you're a loser?""",
+            """You're pretty, aren't you?""",
+            """So, what's in the box?""",
+            """Does my life have meaning?""",
+            """Does my life have purpose?""",
+            """Am I stupid?""",
+            """Is the world going to end?""",
+            """Are you gay?""",
+            """Are you straight?""",
+            """Are you out of your goddamn mind?""",
+            """You can't be serious?""",
+            """This is it, isn't it?"""
+        )
+        val Qlength: Int = Qlist.size
+
+
+
+
+        //generate questions
+        fun generateQuestion() {
+            val nnn = (0..Qlength).random() //for randomized prefab questions
+            var question = "${Qlist[nnn]}" + qm
+            binding.titlehula.text = question
+        }
+
+        //generate answers
+        fun generateHula() {
+            var nx = (0..1).random() //for primary answers
+            var nn = (0..A2length).random() //for secondary answers
+            binding.showMyHula.text = "${Alist1[nx]}" //primary answer
+            binding.hula2.text = "${Alist2[nn]}" //secondary answer
+        }
+
+        //clears editText
+        fun clearTextField() {
+            binding.editText1.getText().clear()
+        }
+
+        //resets
+        fun resetter() {
+            binding.hula2.text = empty
+            binding.showMyHula.text = empty
+            binding.titlehula.text = empty
+            clearTextField()
+        }
+
+        //editText field init
+        binding.editText1.hasFocusable()
+
+
+        //MAIN button
+        binding.pindot.setOnClickListener {
+            lateinit var usertyped: String
+            lateinit var l: String
+
+            //ON STARTUP; generate prefab question and answers them
+            if (binding.titlehula.text == pressStartOrType && binding.pindot.text == START) {
+                binding.editText1.clearFocus()
+                generateQuestion()
+                generateHula()
+                binding.pindot.text = askAnother
+                binding.editText1.isEnabled = false
+            }
+
+            //resets after getting answers
+            else if (binding.titlehula.text != empty) {
+                resetter()
+                binding.editText1.clearFocus()
+                binding.titlehula.text = pressStartOrType
+                binding.pindot.text = START
+                binding.editText1.isEnabled = true
+            }
+
+            //ON questions typed with "?" ; copy-pastes typed question to titlehula and gets answers
+            else if (binding.pindot.text == START && binding.editText1.getText()
+                    .contains(qm, ignoreCase = true)
+            ) {
+                usertyped = binding.editText1.text.toString()
+                l = usertyped
+                binding.titlehula.text = l
+                generateHula()
+                clearTextField()
+                binding.pindot.text = askAnother
+                binding.editText1.clearFocus()
+                binding.editText1.isEnabled = false
+            }
+
+            //ON questions with no "?" ; copy-pastes typed sans-? question, adds "?", then gets answers
+            else if (binding.pindot.text == START && !binding.editText1.getText()
+                    .contains(qm, ignoreCase = true)
+            ) {
+                usertyped = binding.editText1.text.toString()
+                l = usertyped + qm
+                binding.titlehula.text = l
+                clearTextField()
+                generateHula()
+                binding.pindot.text = askAnother
+                binding.editText1.clearFocus()
+                binding.editText1.isEnabled = false
+            }
+        }
+
+
+        //EDITTEXT1 FIELD: clears texts in editText1 field upon typing
+        binding.editText1.setOnFocusChangeListener { v, hasFocus ->
+            if (binding.titlehula.text == pressStartOrType) {
+                resetter()
+                binding.pindot.text = START
+            }
+        }
+
+
+
+    }
+}
+
+
+
+// TODO outsource and use android default dictionary
+//question validity list
+/*        val ValidList : Array<String> = arrayOf(
+            "Should",
+            "should",
+            "Will",
+            "will",
+            "Must",
+            "must",
+            "is",
+            "Is",
+*/
